@@ -61,9 +61,6 @@ public class Jobshop {
 
         IntVar OBJ = model.intVar("Cmax", 0, 999);
 
-        // Temps limite non dépassé
-        model.arithm(OBJ, "<=", Dmax).post();
-
         for(int i=0; i<n; i++) {
             for(int j=0; j<m; j++) {
                 // Fij = Sij + Pij
@@ -78,6 +75,20 @@ public class Jobshop {
             }
         }
 
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                for(int u=0; u<n; u++) {
+                    for(int v=0; v<m; v++) {
+                        if (M[i][j] == M[u][v]) {
+                            System.out.println("YOLOOOOOOOOOO!");
+                        }
+                    }
+                }
+            }
+        }
+
+        // MIN Cmax
+        model.setObjective(false, OBJ);
 
         System.out.println(model);
         Solution solution = model.getSolver().findSolution();
