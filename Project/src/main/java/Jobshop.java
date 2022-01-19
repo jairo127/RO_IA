@@ -61,6 +61,24 @@ public class Jobshop {
 
         IntVar OBJ = model.intVar("Cmax", 0, 999);
 
+        // Temps limite non dépassé
+        model.arithm(OBJ, "<=", Dmax).post();
+
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                // Fij = Sij + Pij
+                model.arithm(date_fin[i*m+j], "=", date_debut[Tab[i][j]], "+", durees[i*m+j]).post();
+            }
+        }
+
+        for(int i=0; i<n; i++) {
+            for(int j=1; j<m; j++) {
+                // Sij >= Fij-1
+                model.arithm(date_debut[Tab[i][j]], ">=", date_fin[i*m+j-1]).post();
+            }
+        }
+
+
         System.out.println(model);
         Solution solution = model.getSolver().findSolution();
         if (solution != null)
